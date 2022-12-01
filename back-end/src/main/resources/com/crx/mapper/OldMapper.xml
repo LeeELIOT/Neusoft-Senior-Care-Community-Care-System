@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.one.dao.oldModel.OldDao">
+
+    <resultMap id="getAllUsersRes" type="old">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
+        <result property="relative" column="relative"/>
+        <result property="oldTypeId" column="old_type_id"/>
+        <result property="relativeTel" column="relative_tel"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remarks" column="remarks"/>
+        <association property="oldType" javaType="oldType">
+            <id property="id" column="type_id"/>
+            <result property="name" column="type_name"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllOlds" resultMap="getAllUsersRes">
+        SELECT o1.id,
+               o1.name,
+               o1.gender,
+               o1.relative,
+               o1.old_type_id,
+               o1.relative_tel,
+               o1.status,
+               o1.create_by,
+               o1.create_date,
+               o1.update_by,
+               o1.update_date,
+               o1.remarks,
+               o2.id type_id,
+               o2.name type_name
+        FROM old o1,
+             old_type o2
+        WHERE o1.old_type_id = o2.id
+          AND o1.name LIKE #{name}
+          AND o1.del_flag = 0
+          AND o2.del_flag = 0
+    </select>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.one.dao.commentModel.ModuleDao">
+
+
+    <select id="getAllModules" resultType="com.one.entity.commentModel.Module">
+        SELECT m.id,
+               m.name,
+               m.score,
+               m.create_by,
+               m.create_date,
+               m.update_date,
+               m.update_by,
+               m.remarks,
+               m.del_flag
+        FROM module m
+        WHERE m.name like #{name}
+    </select>
+</mapper>

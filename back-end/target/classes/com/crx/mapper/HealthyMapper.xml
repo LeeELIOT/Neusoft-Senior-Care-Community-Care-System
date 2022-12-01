@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.one.dao.healthyModel.HealthyDao">
+
+    <resultMap id="getAllHealthyRes" type="com.one.entity.healthyModel.Healthy">
+        <id property="id" column="id"/>
+        <result property="lastDisease" column="last_disease"/>
+        <result property="nowDisease" column="now_disease"/>
+        <result property="homeDisease" column="home_disease"/>
+        <result property="height" column="height"/>
+        <result property="weight" column="weight"/>
+        <result property="blood" column="blood"/>
+        <result property="bloodPressure" column="blood_pressure"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remarks" column="remarks"/>
+        <association property="old" column="old">
+            <id property="id" column="old_id"/>
+            <result property="name" column="name"/>
+            <result property="gender" column="gender"/>
+            <result property="identity" column="identity"/>
+            <result property="relative" column="relative"/>
+            <result property="relativeTel" column="relative_tel"/>
+            <result property="status" column="status"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllHealthy" resultMap="getAllHealthyRes">
+        SELECT h.id id,o.name,o.gender,o.identity,o.relative,h.old_id,
+        o.relative_tel,h.last_disease,h.now_disease,
+        h.home_disease,h.height,
+        h.weight,h.blood,h.blood_pressure,o.status,
+        h.create_by,h.create_date,h.update_by,h.update_date,h.remarks
+        FROM old o,healthy h
+        <where>o.id = h.old_id
+            <if test="id!=null">
+                AND h.id = #{id}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.one.dao.staffModel.StaffDao">
+
+    <resultMap id="getAllStaffs" type="staff">
+        <id property="id" column="staff_id"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
+        <result property="identity" column="identity"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remarks" column="remarks"/>
+        <association property="staffType" javaType="staffType">
+            <id property="id" column="st_id"/>
+            <result property="name" column="staff_type_name"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="getJobRes" type="job">
+        <id property="id" column="jobId"/>
+        <result property="jobRemark" column="job_remark"/>
+        <result property="inTime" column="in_time"/>
+        <result property="outTime" column="out_time"/>
+        <association property="staff" javaType="staff">
+            <id property="id" column="staff_id"/>
+            <result property="name" column="name"/>
+            <result property="gender" column="gender"/>
+            <result property="identity" column="identity"/>
+            <result property="createDate" column="create_date"/>
+            <result property="createBy" column="create_by"/>
+            <result property="updateDate" column="update_date"/>
+            <result property="updateBy" column="update_by"/>
+        </association>
+    </resultMap>
+
+
+    <select id="getAllStaffs" resultMap="getAllStaffs">
+        SELECT s1.id            staff_id,
+               s1.name,
+               s1.gender,
+               s1.identity,
+               s1.create_by,
+               s1.create_date,
+               s1.update_by,
+               s1.update_date,
+               s1.remarks,
+               s1.staff_type_id st_id,
+               s2.id,
+               s2.name          staff_type_name
+        FROM staff s1,
+             staff_type s2
+        where s2.id = s1.staff_type_id
+          AND (s1.name LIKE #{name}
+            and s2.name = #{staffTypeName})
+          AND s1.del_flag = 0
+          AND s2.del_flag = 0
+    </select>
+
+    <select id="getJob" resultMap="getJobRes">
+        SELECT s.id,
+               s.name,
+               s.gender,
+               s.identity,
+               s.create_date,
+               s.create_by,
+               s.update_by,
+               s.update_date,
+               s.update_by,
+               j.id jobId,
+               j.staff_id,
+               j.job_remark,
+               j.in_time,
+               j.out_time
+        FROM staff s,
+             job j
+        WHERE s.id = j.staff_id
+          AND s.del_flag = 0
+          AND j.del_flag = 0
+          AND s.id = #{StaffId}
+    </select>
+</mapper>

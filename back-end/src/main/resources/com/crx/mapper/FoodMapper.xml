@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.one.dao.foodModel.FoodDao">
+
+    <resultMap id="getAllFoodsRes" type="food">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="picture" column="picture"/>
+        <result property="price" column="price"/>
+        <association property="taste" javaType="taste">
+            <id property="id" column="taste_id"/>
+            <result property="name" column="tname"/>
+        </association>
+
+    </resultMap>
+
+    <select id="getAllFoods" resultMap="getAllFoodsRes">
+        SELECT f.id, f.name,f.`picture`,f.`price`,t.`name` tname,f.taste_id
+        FROM food f,taste t
+        WHERE eat_time=#{name} AND f.`taste_id`=t.`id`
+    </select>
+</mapper>

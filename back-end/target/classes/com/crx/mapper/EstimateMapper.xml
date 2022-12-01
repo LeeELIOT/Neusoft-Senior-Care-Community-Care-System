@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.one.dao.estimateModel.EstimateDao">
+    
+    <resultMap id="getAllEstimatesRes" type="estimate">
+        <id property="id" column="id"/>
+        <result property="oldId" column="old_id"/>
+        <result property="templateId" column="template_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="result" column="result"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remarks" column="remarks"/>
+        <association property="template" javaType="template">
+            <id property="id" column="template_id"/>
+            <result property="name" column="t_name"/>
+            <result property="createBy" column="create_by"/>
+            <result property="updateBy" column="update_by"/>
+        </association>
+        <association property="old" javaType="old">
+            <id property="id" column="old_id"/>
+            <result property="name" column="name"/>
+            <result property="gender" column="gender"/>
+        </association>
+    </resultMap>
+
+
+    <select id="getAllEstimates" resultMap="getAllEstimatesRes">
+        SELECT o.name,
+               o.gender,
+               o.identity,
+               e1.id,
+               e1.old_id,
+               e1.template_id,
+               e1.create_time,
+               e1.end_time,
+               e1.result,
+               e1.create_by,
+               e1.create_date,
+               e1.update_by,
+               e1.update_date,
+               e1.remarks,
+               t.name t_name,
+               t.create_by,
+               t.update_by
+        FROM old o,
+             estimate e1,
+             template t
+        WHERE e1.old_id = o.id
+          AND t.id = e1.template_id
+          AND e1.template_id IN (SELECT id FROM template)
+          AND (o.name LIKE #{idOrName} OR e1.id = #{idOrName})
+          AND e1.del_flag = 0
+    </select>
+</mapper>

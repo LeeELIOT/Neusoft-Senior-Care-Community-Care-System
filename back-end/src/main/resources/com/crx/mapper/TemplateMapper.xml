@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.one.dao.estimateModel.TemplateDao">
+
+    <resultMap id="getAllTemplatesRes" type="template">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remarks" column="remarks"/>
+        <result property="delFlag" column="del_flag"/>
+        <association property="templateType" javaType="eTemplateType">
+            <id property="id" column="et_id"/>
+            <result property="name" column="ename"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllTemplates" resultMap="getAllTemplatesRes">
+        SELECT t.id
+             , t.name
+             , e.name ename
+             , t.et_id
+             , t.create_by
+             , t.create_date
+             , t.update_by
+             , t.update_date
+             , t.remarks
+             , t.del_flag
+        FROM template t,
+             etemplate_type e
+        WHERE e.id = t.et_id
+          and t.name like #{name}
+    </select>
+</mapper>

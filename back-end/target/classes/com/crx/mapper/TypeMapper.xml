@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.one.dao.typeModel.TypeDao">
+
+
+    <select id="getAllOldTypes" resultType="com.one.entity.oldModel.OldType">
+        SELECT o.id, o.name, o.create_by, o.create_date, o.update_by, o.update_date, o.remarks
+        FROM old_type o
+        WHERE o.del_flag = 0
+          AND o.name LIKE #{name}
+    </select>
+    <select id="getAllPriceTypes" resultType="com.one.entity.priceModel.PriceType">
+        SELECT p.id, p.name, p.create_by, p.create_date, p.update_by, p.update_date, p.remarks
+        FROM price_type p
+        WHERE p.del_flag = 0
+          AND p.name LIKE #{name}
+    </select>
+    <select id="getAllStaffTypes" resultType="com.one.entity.staffModel.StaffType">
+        SELECT s.id, s.name, s.create_by, s.create_date, s.update_by, update_date, s.remarks
+        FROM staff_type s
+        WHERE s.del_flag = 0
+          AND s.name LIKE #{name}
+    </select>
+</mapper>
